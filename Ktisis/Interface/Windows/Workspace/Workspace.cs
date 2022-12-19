@@ -70,13 +70,13 @@ namespace Ktisis.Interface.Windows.Workspace
 
 				ImGui.TextColored(
 					gposeOn ? ColGreen : ColRed,
-					gposeOn ? "GPose Enabled" : "GPose Disabled"
+					gposeOn ? "GPose 已启用" : "GPose 已禁用"
 				);
 
 				if (PoseHooks.AnamPosingEnabled) {
 					ImGui.TextColored(
 						ColYellow,
-						"Anamnesis Enabled"	
+						"Anamnesis 已启用"	
 					);
 				}
 
@@ -135,7 +135,7 @@ namespace Ktisis.Interface.Windows.Workspace
 					EditActor.Show();
 			}
 			ImGui.SameLine();
-			ImGui.Text("Edit actor's appearance");
+			ImGui.Text("编辑对象外观");
 
 			ImGui.Spacing();
 
@@ -146,15 +146,15 @@ namespace Ktisis.Interface.Windows.Workspace
 			AnimationControls.Draw(target);
 
 			// Gaze control
-			if (ImGui.CollapsingHeader("Gaze Control")) {
+			if (ImGui.CollapsingHeader("目光控制")) {
 				if (PoseHooks.PosingEnabled)
-					ImGui.TextWrapped("Gaze controls are unavailable while posing.");
+					ImGui.TextWrapped("摆拍模式下无法使用目光控制.");
 				else
 					EditGaze.Draw(actor);
 			}
 
 			// Import & Export
-			if (ImGui.CollapsingHeader("Import & Export"))
+			if (ImGui.CollapsingHeader("导入 & 导出"))
 				ImportExportChara(actor);
 
 			ImGui.EndTabItem();
@@ -187,15 +187,15 @@ namespace Ktisis.Interface.Windows.Workspace
 			ImGui.Spacing();
 
 			// Bone categories
-			if (ImGui.CollapsingHeader("Bone Categories")) {
+			if (ImGui.CollapsingHeader("骨骼分类")) {
 
 				if (!Categories.DrawToggleList(cfg)) {
-					ImGui.Text("No bone found.");
-					ImGui.Text("Show Skeleton (");
+					ImGui.Text("未找到骨骼.");
+					ImGui.Text("点击显示骨骼 (");
 					ImGui.SameLine();
 					GuiHelpers.Icon(FontAwesomeIcon.EyeSlash);
 					ImGui.SameLine();
-					ImGui.Text(") to fill this.");
+					ImGui.Text(") 来填满此处.");
 				}
 			}
 
@@ -203,7 +203,7 @@ namespace Ktisis.Interface.Windows.Workspace
 			BoneTree.Draw(actor);
 
 			// Import & Export
-			if (ImGui.CollapsingHeader("Import & Export"))
+			if (ImGui.CollapsingHeader("导入 & 导出"))
 				ImportExportPose(actor);
 
 			// Advanced
@@ -215,19 +215,19 @@ namespace Ktisis.Interface.Windows.Workspace
 		}
 		
 		public static unsafe void DrawAdvancedDebugOptions(Actor* actor) {
-			if(ImGui.Button("Reset Current Pose") && actor->Model != null)
+			if(ImGui.Button("重设当前动作") && actor->Model != null)
 				actor->Model->SyncModelSpace();
 
 			if(ImGui.Button("Set to Reference Pose") && actor->Model != null)
 				actor->Model->SyncModelSpace(true);
 
-			if(ImGui.Button("Store Pose") && actor->Model != null)
+			if(ImGui.Button("存储动作") && actor->Model != null)
 				_TempPose.Store(actor->Model->Skeleton);
 			ImGui.SameLine();
-			if(ImGui.Button("Apply Pose") && actor->Model != null)
+			if(ImGui.Button("应用动作") && actor->Model != null)
 				_TempPose.Apply(actor->Model->Skeleton);
 
-			if(ImGui.Button("Force Redraw"))
+			if(ImGui.Button("强制重绘"))
 				actor->Redraw();
 		}
 
@@ -268,7 +268,7 @@ namespace Ktisis.Interface.Windows.Workspace
 					ImGui.Text($"{bone.LocaleName}");
 				} else {
 					ImGui.BeginDisabled();
-					ImGui.Text("No bone selected");
+					ImGui.Text("未选择骨骼");
 					ImGui.EndDisabled();
 				}
 
@@ -295,7 +295,7 @@ namespace Ktisis.Interface.Windows.Workspace
 			ImGui.Dummy(new Vector2(size, size) / 2);
 
 			GuiHelpers.Icon(icon);
-			GuiHelpers.Tooltip(isGamePlaybackRunning ? "Game Animation is playing for this target." + (PoseHooks.PosingEnabled ? "\nPosing may reset periodically." : "") : "Game Animation is paused for this target." + (!PoseHooks.PosingEnabled ? "\nAnimation Control Can be used." : ""));
+			GuiHelpers.Tooltip(isGamePlaybackRunning ? "此目标正在播放游戏动作." + (PoseHooks.PosingEnabled ? "\n摆拍可能会周期性重置." : "") : "目标的游戏动作已暂停." + (!PoseHooks.PosingEnabled ? "\n动画控制将无法使用." : ""));
 
 			ImGui.EndGroup();
 
@@ -311,14 +311,14 @@ namespace Ktisis.Interface.Windows.Workspace
 			var trans = Ktisis.Configuration.PoseTransforms;
 
 			var rot = trans.HasFlag(PoseTransforms.Rotation);
-			if (ImGui.Checkbox("Rotation##ImportExportPose", ref rot))
+			if (ImGui.Checkbox("旋转##ImportExportPose", ref rot))
 				trans = trans.ToggleFlag(PoseTransforms.Rotation);
 
 			var pos = trans.HasFlag(PoseTransforms.Position);
 			var col = pos;
 			ImGui.SameLine();
 			if (col) ImGui.PushStyleColor(ImGuiCol.Text, 0xff00fbff);
-			if (ImGui.Checkbox("Position##ImportExportPose", ref pos))
+			if (ImGui.Checkbox("位置##ImportExportPose", ref pos))
 				trans = trans.ToggleFlag(PoseTransforms.Position);
 			if (col) ImGui.PopStyleColor();
 
@@ -326,33 +326,33 @@ namespace Ktisis.Interface.Windows.Workspace
 			col = scale;
 			ImGui.SameLine();
 			if (col) ImGui.PushStyleColor(ImGuiCol.Text, 0xff00fbff);
-			if (ImGui.Checkbox("Scale##ImportExportPose", ref scale))
+			if (ImGui.Checkbox("缩放##ImportExportPose", ref scale))
 				trans = trans.ToggleFlag(PoseTransforms.Scale);
 			if (col) ImGui.PopStyleColor();
 
 			if (trans > PoseTransforms.Rotation) {
 				ImGui.TextColored(
 					ColYellow,
-					"* Importing may have unexpected results."
+					"* 可能会出现意想不到的结果."
 				);
 			}
 
 			Ktisis.Configuration.PoseTransforms = trans;
 
 			ImGui.Spacing();
-			ImGui.Text("Modes");
+			ImGui.Text("模式");
 
 			// Modes
 
 			var modes = Ktisis.Configuration.PoseMode;
 
 			var body = modes.HasFlag(PoseMode.Body);
-			if (ImGui.Checkbox("Body##ImportExportPose", ref body))
+			if (ImGui.Checkbox("身体##ImportExportPose", ref body))
 				modes = modes.ToggleFlag(PoseMode.Body);
 
 			var face = modes.HasFlag(PoseMode.Face);
 			ImGui.SameLine();
-			if (ImGui.Checkbox("Expression##ImportExportPose", ref face))
+			if (ImGui.Checkbox("表情##ImportExportPose", ref face))
 				modes = modes.ToggleFlag(PoseMode.Face);
 
 			Ktisis.Configuration.PoseMode = modes;
@@ -364,20 +364,30 @@ namespace Ktisis.Interface.Windows.Workspace
 			var isUseless = trans == 0 || modes == 0;
 
 			if (isUseless) ImGui.BeginDisabled();
-			if (ImGui.Button("Import##ImportExportPose")) {
+			if (ImGui.Button("导入##ImportExportPose")) {
 				KtisisGui.FileDialogManager.OpenFileDialog(
-					"Importing Pose",
-					"Pose Files (.pose){.pose}",
+					"导入动作文件",
+					"动作文件 (.pose|.cmp){.pose,.cmp}",
 					(success, path) => {
 						if (!success) return;
 
 						var content = File.ReadAllText(path[0]);
-						var pose = JsonParser.Deserialize<PoseFile>(content);
-						if (pose == null) return;
+                        bool isCMP = path[0].EndsWith(".cmp");
+                        bool recoverState = false;
+
+                        var pose = isCMP ? CMPFile.Upgrade(content) : JsonParser.Deserialize<PoseFile>(content);
+                        if (pose == null) return;
 
 						if (actor->Model == null) return;
 
-						var skeleton = actor->Model->Skeleton;
+                        if (isCMP && trans.HasFlag(PoseTransforms.Position))
+                        {
+                            // Temporary disable the position flag (cuz cmp doesnt have one)
+                            trans = trans.ToggleFlag(PoseTransforms.Position);
+                            recoverState = true;
+                        }
+
+                        var skeleton = actor->Model->Skeleton;
 						if (skeleton == null) return;
 
 						pose.ConvertLegacyBones();
@@ -396,17 +406,23 @@ namespace Ktisis.Interface.Windows.Workspace
 								pose.Bones.ApplyToPartial(skeleton, p, trans);
 							}
 						}
-					},
+
+                        if (isCMP && recoverState)
+                        {
+                            // Turn it back on if needed
+                            trans = trans.ToggleFlag(PoseTransforms.Position);
+                        }
+                    },
 					1,
 					null
 				);
 			}
 			if (isUseless) ImGui.EndDisabled();
 			ImGui.SameLine();
-			if (ImGui.Button("Export##ImportExportPose")) {
+			if (ImGui.Button("导出##ImportExportPose")) {
 				KtisisGui.FileDialogManager.SaveFileDialog(
-					"Exporting Pose",
-					"Pose Files (.pose){.pose}",
+					"导出动作文件至",
+					"动作文件 (.pose){.pose}",
 					"Untitled.pose",
 					".pose",
 					(success, path) => {
