@@ -44,7 +44,7 @@ namespace Ktisis.Interface.Components {
 			SavedObjects.RemoveAll(o => !IsValidActor(o));
 
 			var buttonSize = new Vector2(ImGui.GetContentRegionAvail().X - GuiHelpers.WidthMargin(), ControlButtons.ButtonSize.Y);
-			if (ImGui.CollapsingHeader("Actor List")) {
+			if (ImGui.CollapsingHeader("角色列表")) {
 				long? toRemove = null;
 				foreach (var pointer in SavedObjects) {
 					if (!IsValidActor(pointer)) continue;
@@ -55,7 +55,7 @@ namespace Ktisis.Interface.Components {
 				}
 				if (toRemove != null) SavedObjects.Remove((long)toRemove);
 
-				if (GuiHelpers.IconButtonTooltip(FontAwesomeIcon.Plus, "Add Actor", ControlButtons.ButtonSize))
+				if (GuiHelpers.IconButtonTooltip(FontAwesomeIcon.Plus, "添加角色", ControlButtons.ButtonSize))
 					OpenSelector();
 
 				ImGui.SameLine(ImGui.GetContentRegionAvail().X - GuiHelpers.WidthMargin() - (ImGui.GetStyle().ItemSpacing.X) - GuiHelpers.CalcIconSize(FontAwesomeIcon.InfoCircle).X);
@@ -65,7 +65,7 @@ namespace Ktisis.Interface.Components {
 				GuiHelpers.Icon(FontAwesomeIcon.InfoCircle, false);
 				if (ImGui.IsItemHovered()) {
 					ImGui.BeginTooltip();
-					ImGui.Text("Right click to remove an Actor from the list");
+					ImGui.Text("单击右键将角色从列表中移除");
 					ImGui.EndTooltip();
 				}
 				if (SelectorList != null)
@@ -91,11 +91,11 @@ namespace Ktisis.Interface.Components {
 
 			var actorNamesList = SavedObjects.Select(pointer => ((Actor*)pointer)->GetNameOrId() + ExtraInfo(pointer)).ToArray();
 			ImGui.Combo("", ref selectedIndex, actorNamesList, actorNamesList.Length);
-			GuiHelpers.Tooltip("Select active Actor");
+			GuiHelpers.Tooltip("选择活动角色");
 			Services.Targets->GPoseTarget = (GameObject*)SavedObjects[selectedIndex];
 			ImGui.SameLine();
 
-			if (GuiHelpers.IconButtonTooltip(FontAwesomeIcon.Plus, "Add Actor to list."))
+			if (GuiHelpers.IconButtonTooltip(FontAwesomeIcon.Plus, "添加角色到列表."))
 				OpenSelector();
 
 			ImGui.SameLine();
@@ -138,7 +138,7 @@ namespace Ktisis.Interface.Components {
 				(t) => SavedObjects.Add((long)t.Address), // on Select
 				CloseSelector, // on close
 				ref Search,
-				"Actor Select",
+				"角色选择",
 				"##actor_select",
 				"##actor_search");
 		}
@@ -171,9 +171,9 @@ namespace Ktisis.Interface.Components {
 			if (IsGposeActor(gameObject))
 				info.Add("GPose");
 			if (IsYou(gameObject))
-				info.Add("You");
+				info.Add("你");
 			else if (IsPlayer(gameObject))
-				info.Add("Player");
+				info.Add("玩家");
 			return info.Any() ? $" ({String.Join(", ", info)})" : "";
 		}
 		private static string ExtraInfo(long gameObjectPointer) =>

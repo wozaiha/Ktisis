@@ -207,7 +207,7 @@ namespace Ktisis.Interface.Windows.Workspace
 				ImportExportPose(actor);
 
 			// Advanced
-			if (ImGui.CollapsingHeader("Advanced (Debug)")) {
+			if (ImGui.CollapsingHeader("高级 (Debug)")) {
 				DrawAdvancedDebugOptions(actor);
 			}
 
@@ -215,16 +215,16 @@ namespace Ktisis.Interface.Windows.Workspace
 		}
 		
 		public static unsafe void DrawAdvancedDebugOptions(Actor* actor) {
-			if(ImGui.Button("重设当前动作") && actor->Model != null)
+			if(ImGui.Button("重设当前姿势") && actor->Model != null)
 				actor->Model->SyncModelSpace();
 
-			if(ImGui.Button("Set to Reference Pose") && actor->Model != null)
+			if(ImGui.Button("设置为参考姿势") && actor->Model != null)
 				actor->Model->SyncModelSpace(true);
 
-			if(ImGui.Button("存储动作") && actor->Model != null)
+			if(ImGui.Button("存储姿势") && actor->Model != null)
 				_TempPose.Store(actor->Model->Skeleton);
 			ImGui.SameLine();
-			if(ImGui.Button("应用动作") && actor->Model != null)
+			if(ImGui.Button("应用姿势") && actor->Model != null)
 				_TempPose.Apply(actor->Model->Skeleton);
 
 			if(ImGui.Button("强制重绘"))
@@ -295,7 +295,7 @@ namespace Ktisis.Interface.Windows.Workspace
 			ImGui.Dummy(new Vector2(size, size) / 2);
 
 			GuiHelpers.Icon(icon);
-			GuiHelpers.Tooltip(isGamePlaybackRunning ? "此目标正在播放游戏动作." + (PoseHooks.PosingEnabled ? "\n摆拍可能会周期性重置." : "") : "目标的游戏动作已暂停." + (!PoseHooks.PosingEnabled ? "\n动画控制将无法使用." : ""));
+			GuiHelpers.Tooltip(isGamePlaybackRunning ? "此目标正在播放游戏动作." + (PoseHooks.PosingEnabled ? "\n动作可能会周期性重置." : "") : "目标的游戏动作已暂停." + (!PoseHooks.PosingEnabled ? "\n动画控制将无法使用." : ""));
 
 			ImGui.EndGroup();
 
@@ -366,8 +366,8 @@ namespace Ktisis.Interface.Windows.Workspace
 			if (isUseless) ImGui.BeginDisabled();
 			if (ImGui.Button("导入##ImportExportPose")) {
 				KtisisGui.FileDialogManager.OpenFileDialog(
-					"导入动作文件",
-					"动作文件 (.pose|.cmp){.pose,.cmp}",
+					"导入姿势文件",
+					"姿势文件 (.pose|.cmp){.pose,.cmp}",
 					(success, path) => {
 						if (!success) return;
 
@@ -421,8 +421,8 @@ namespace Ktisis.Interface.Windows.Workspace
 			ImGui.SameLine();
 			if (ImGui.Button("导出##ImportExportPose")) {
 				KtisisGui.FileDialogManager.SaveFileDialog(
-					"导出动作文件至",
-					"动作文件 (.pose){.pose}",
+					"导出姿势文件至",
+					"姿势文件 (.pose){.pose}",
 					"Untitled.pose",
 					".pose",
 					(success, path) => {
@@ -459,18 +459,18 @@ namespace Ktisis.Interface.Windows.Workspace
 			// Equipment
 
 			ImGui.BeginGroup();
-			ImGui.Text("Equipment");
+			ImGui.Text("装备");
 
 			var gear = mode.HasFlag(SaveModes.EquipmentGear);
-			if (ImGui.Checkbox("Gear##ImportExportChara", ref gear))
+			if (ImGui.Checkbox("护甲##ImportExportChara", ref gear))
 				mode ^= SaveModes.EquipmentGear;
 
 			var accs = mode.HasFlag(SaveModes.EquipmentAccessories);
-			if (ImGui.Checkbox("Accessories##ImportExportChara", ref accs))
+			if (ImGui.Checkbox("附件##ImportExportChara", ref accs))
 				mode ^= SaveModes.EquipmentAccessories;
 
 			var weps = mode.HasFlag(SaveModes.EquipmentWeapons);
-			if (ImGui.Checkbox("Weapons##ImportExportChara", ref weps))
+			if (ImGui.Checkbox("武器##ImportExportChara", ref weps))
 				mode ^= SaveModes.EquipmentWeapons;
 
 			ImGui.EndGroup();
@@ -479,18 +479,18 @@ namespace Ktisis.Interface.Windows.Workspace
 
 			ImGui.SameLine();
 			ImGui.BeginGroup();
-			ImGui.Text("Appearance");
+			ImGui.Text("外观");
 
 			var body = mode.HasFlag(SaveModes.AppearanceBody);
-			if (ImGui.Checkbox("Body##ImportExportChara", ref body))
+			if (ImGui.Checkbox("身体##ImportExportChara", ref body))
 				mode ^= SaveModes.AppearanceBody;
 
 			var face = mode.HasFlag(SaveModes.AppearanceFace);
-			if (ImGui.Checkbox("Face##ImportExportChara", ref face))
+			if (ImGui.Checkbox("脸型##ImportExportChara", ref face))
 				mode ^= SaveModes.AppearanceFace;
 
 			var hair = mode.HasFlag(SaveModes.AppearanceHair);
-			if (ImGui.Checkbox("Hair##ImportExportChara", ref hair))
+			if (ImGui.Checkbox("头发##ImportExportChara", ref hair))
 				mode ^= SaveModes.AppearanceHair;
 
 			ImGui.EndGroup();
@@ -506,10 +506,10 @@ namespace Ktisis.Interface.Windows.Workspace
 			var isUseless = mode == SaveModes.None;
 			if (isUseless) ImGui.BeginDisabled();
 
-			if (ImGui.Button("Import##ImportExportChara")) {
+			if (ImGui.Button("导入##ImportExportChara")) {
 				KtisisGui.FileDialogManager.OpenFileDialog(
-					"Importing Character",
-					"Anamnesis Chara (.chara){.chara}",
+					"导入角色数据",
+					"Anamnesis 角色数据 (.chara){.chara}",
 					(success, path) => {
 						if (!success) return;
 
@@ -526,10 +526,10 @@ namespace Ktisis.Interface.Windows.Workspace
 
 			ImGui.SameLine();
 
-			if (ImGui.Button("Export##ImportExportChara")) {
+			if (ImGui.Button("导出##ImportExportChara")) {
 				KtisisGui.FileDialogManager.SaveFileDialog(
-					"Exporting Character",
-					"Anamnesis Chara (.chara){.chara}",
+					"导出角色数据至",
+					"Anamnesis 角色数据 (.chara){.chara}",
 					"Untitled.chara",
 					".chara",
 					(success, path) => {

@@ -81,16 +81,16 @@ namespace Ktisis.Interface.Components {
 				ImGui.PopStyleColor();
 				if (ImGui.IsItemHovered()) {
 					ImGui.BeginTooltip();
-					ImGui.Text("Clear category");
+					ImGui.Text("清除分类");
 					ImGui.SameLine();
-					ImGui.TextColored(Workspace.ColGreen, "overload visibility");
+					ImGui.TextColored(Workspace.ColGreen, "覆盖可见性");
 					ImGui.EndTooltip();
 				}
 			} else {
-				if (GuiHelpers.IconButtonTooltip(FontAwesomeIcon.CheckDouble, "Select all categories", ControlButtons.ButtonSize))
+				if (GuiHelpers.IconButtonTooltip(FontAwesomeIcon.CheckDouble, "选中所有分类", ControlButtons.ButtonSize))
 					cfg.ShowBoneByCategory = cfg.ShowBoneByCategory.ToDictionary(p => p.Key, p => true);
 				ImGui.SameLine();
-				if (GuiHelpers.IconButtonTooltip(FontAwesomeIcon.Times, "Deselect all categories", ControlButtons.ButtonSize))
+				if (GuiHelpers.IconButtonTooltip(FontAwesomeIcon.Times, "取消选中所有分类", ControlButtons.ButtonSize))
 					foreach (var key in Category.Categories.Keys)
 						cfg.ShowBoneByCategory[key] = false;
 			}
@@ -101,17 +101,17 @@ namespace Ktisis.Interface.Components {
 			GuiHelpers.Icon(FontAwesomeIcon.InfoCircle, false);
 			if (ImGui.IsItemHovered()) {
 				ImGui.BeginTooltip();
-				ImGui.Text("Tips:");
-				ImGui.BulletText("Left click to toggle a category");
-				ImGui.BulletText("Right click to select the desired category only");
-				ImGui.BulletText("Shift + Left click to toggle the category into");
-				ImGui.SameLine(); ImGui.TextColored(Workspace.ColGreen, "overload visibility");
-				ImGui.BulletText("Shift + Right click to select the desired");
-				ImGui.SameLine(); ImGui.TextColored(Workspace.ColGreen, "overload visibility"); ImGui.SameLine();
-				ImGui.Text("only");
-				ImGui.BulletText("Keyboard shortcuts can be bound to individual category");
-				ImGui.SameLine(); ImGui.TextColored(Workspace.ColGreen, "overload visibility"); ImGui.SameLine();
-				ImGui.Text("hold or toggle");
+				ImGui.Text("小贴士:");
+				ImGui.BulletText("单击左键来开关分类");
+				ImGui.BulletText("单击右键来仅选择想要的分类");
+				ImGui.BulletText("Shift + 左键来将分类启用为");
+				ImGui.SameLine(); ImGui.TextColored(Workspace.ColGreen, "可见性覆盖");
+				ImGui.BulletText("Shift + 右键来仅启用想要的分类为");
+				ImGui.SameLine(); ImGui.TextColored(Workspace.ColGreen, "可见性覆盖"); ImGui.SameLine();
+				// ImGui.Text("only");
+				ImGui.BulletText("键盘快捷键可绑定到独立分类的");
+				ImGui.SameLine(); ImGui.TextColored(Workspace.ColGreen, "可见性覆盖"); ImGui.SameLine();
+				ImGui.Text("按住或开关");
 				ImGui.EndTooltip();
 			}
 
