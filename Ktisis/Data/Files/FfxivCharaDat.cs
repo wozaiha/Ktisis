@@ -41,7 +41,7 @@ namespace Ktisis.Data.Files {
 
 		public unsafe string Note() {
 			fixed (byte* ptr = NoteChars)
-				return Marshal.PtrToStringAnsi((IntPtr)ptr) ?? "";
+				return Marshal.PtrToStringUTF8((IntPtr)ptr) ?? "";
 		}
 
 		public unsafe static FfxivCharaDat GetFromSlot(int slot) {

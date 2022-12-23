@@ -29,7 +29,7 @@ namespace Ktisis.Structs.Actor {
 		[FieldOffset(0x1A68)] public byte TargetObjectID;
 		[FieldOffset(0x1A6C)] public byte TargetMode;
 
-		public unsafe string? Name => Marshal.PtrToStringAnsi((IntPtr)GameObject.GetName());
+		public unsafe string? Name => Marshal.PtrToStringUTF8((IntPtr)GameObject.GetName());
 
 		public string GetNameOr(string fallback) => ((ObjectKind)GameObject.ObjectKind == ObjectKind.Pc && !Ktisis.Configuration.DisplayCharName) || string.IsNullOrEmpty(Name)? fallback : Name;
 		public string GetNameOrId() => GetNameOr("Actor #" + ObjectID);
